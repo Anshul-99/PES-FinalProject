@@ -35,6 +35,4 @@ void send_dev_add();
 
 int8_t write_data(uint8_t dev, uint8_t address, uint8_t data);
 
-int8_t write_data_byte(uint8_t dev, uint8_t address, uint8_t data);
-
 #endif /* I2C_H_ */

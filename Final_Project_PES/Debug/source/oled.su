@@ -1,1 +1,5 @@
-oled.c:11:6:init_display	8	static
+oled.c:25:6:init_display	8	static
+oled.c:71:6:clear_display	16	static
+oled.c:90:6:fill_display	16	static
+oled.c:109:6:toggle_pixel	48	static
+oled.c:136:6:shape_display	16	static

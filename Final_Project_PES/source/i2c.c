@@ -114,24 +114,6 @@ void send_dev_add()
 
 int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
 {
-	/* Code written by me */
-	/*start_signal();
-	I2C1->D = DEV_ADD_WRITE;
-	while(I2C1->S & I2C_S_BUSY_MASK); //I2C1 is busy transmitting data
-	if(!(I2C1->S & I2C_S_TCF_MASK)) // If TCF flag is not set error in transmission
-		return -1;
-
-	I2C1->D = CMD;
-	while(I2C1->S & I2C_S_BUSY_MASK); //I2C1 is busy transmitting data
-	if(!(I2C1->S & I2C_S_TCF_MASK)) // If TCF flag is not set error in transmission
-		return -1;
-
-	I2C1->D = 0xAF;
-	while(I2C1->S & I2C_S_BUSY_MASK); //I2C1 is busy transmitting data
-	if(!(I2C1->S & I2C_S_TCF_MASK)) // If TCF flag is not set error in transmission
-		return -1;
-	stop_signal();*/
-
 	/* From Dean's code */
 	I2C_TRAN;
 	I2C_M_START;
@@ -144,29 +126,6 @@ int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
 	I2C1->D = data; // Data or command
 	I2C_WAIT
 	I2C_M_STOP;
-	//I2C_M_RSTART;
-
-	//int i =10;
-	//while(i--);
-
-	return 0;
-}
-
-int8_t write_data_byte(uint8_t dev, uint8_t address, uint8_t data)
-{
-	/* From Dean's code */
-	I2C_TRAN;
-	I2C_M_START;
-	I2C1->D = dev; // send device address
-	I2C_WAIT
-
-	I2C1->D = address; // send information regarding the next byte. Whether it is data or command
-	I2C_WAIT
-
-	I2C1->D = data; // Data or command
-	I2C_WAIT
-	I2C_M_STOP;
-
 
 
 	return 0;
