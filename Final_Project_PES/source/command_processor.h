@@ -58,16 +58,10 @@ void display_help();
 
 void display_name();
 
-/*
- * Displays the build version, date, machine and commit ID
- *
- * Parameters:
- *   none
- *
- * Returns:
- *   void
- */
+void display_shape(int argc, char* argv[]);
 
-void display_info();
+void display_draw(int argc, char* argv[]);
+
+void display_gif(int argc, char* argv[]);
 
 #endif /* COMMAND_PROCESSOR_H_ */

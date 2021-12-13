@@ -1,4 +1,6 @@
-command_processor.c:66:6:display_help	16	static
-command_processor.c:78:6:display_name	8	static
-command_processor.c:83:6:display_info	8	static
-command_processor.c:89:6:process_command	88	static
+command_processor.c:90:6:display_help	16	static
+command_processor.c:102:6:display_name	8	static
+command_processor.c:107:6:display_shape	16	static
+command_processor.c:123:6:display_draw	16	static
+command_processor.c:135:6:display_gif	16	static
+command_processor.c:143:6:process_command	88	static

@@ -25,15 +25,15 @@ void init_i2c()
 	SIM->SCGC4 |= SIM_SCGC4_I2C1(1); // Enable clock to I2C1
 	SIM->SCGC5 |= SIM_SCGC5_PORTE(1); // Enable clock to PORTE
 
-	PORTE->PCR[0] |= PORT_PCR_MUX(6); // Enable SDA on pin PTE0
-	PORTE->PCR[1] |= PORT_PCR_MUX(6); // Enable SCL on pin PTE1
+	PORTE->PCR[0] |= PORT_PCR_MUX(6) /*| PORT_PCR_PS(1)| PORT_PCR_PE(1) */; // Enable SDA on pin PTE0
+	PORTE->PCR[1] |= PORT_PCR_MUX(6) /*| PORT_PCR_PS(1)| PORT_PCR_PE(1)*/; // Enable SCL on pin PTE1
 
 	I2C1->F = (I2C_F_ICR(0x12) | I2C_F_MULT(0)); //ICR can be 0x12 as well
 
 	I2C1->C1 |= I2C_C1_IICEN(1); // Enable I2C peripheral
 
 	// Select high drive mode
-	I2C1->C2 |= (I2C_C2_HDRS_MASK);
+	//I2C1->C2 |= (I2C_C2_HDRS_MASK);
 }
 
 void start_signal()
@@ -117,6 +117,7 @@ int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
 	/* From Dean's code */
 	I2C_TRAN;
 	I2C_M_START;
+	I2C_M_START;
 	I2C1->D = dev; // send device address
 	I2C_WAIT
 
@@ -125,8 +126,11 @@ int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
 
 	I2C1->D = data; // Data or command
 	I2C_WAIT
+
 	I2C_M_STOP;
 
+	/*int k =5;
+	while(k--);*/
 
 	return 0;
 }

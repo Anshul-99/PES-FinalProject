@@ -11,7 +11,7 @@
 
 #define DISPLAY_OFF 0xAE
 #define SET_DISPLAY_CLK 0XD5
-#define DISPLAY_CLK_FREQ 0X70
+#define DISPLAY_CLK_FREQ 0XF0
 #define SET_MUX_RATIO 0xA8
 #define MUX_RATIO 0x3F
 #define SET_DISPLAY_OFFSET 0XD3
@@ -22,7 +22,7 @@
 #define INT_IREF_SETTING 0XAD
 #define DISABLE_IREF 0X20
 #define SET_SEG_REMAP 0XA1 //A0
-#define SET_COM_SCAN_DIR 0XC0
+#define SET_COM_SCAN_DIR 0XC8
 #define SET_COMPINS_HW_CONFIG 0XDA
 #define COMPINS_HW_CONFIG 0X12
 #define SET_CONTRAST_CNTRL 0X81
@@ -52,6 +52,27 @@ void fill_display();
 
 void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state);
 
-void shape_display();
+void draw_square();
+
+void draw_rectangle();
+
+void generate_buffer(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t* arr);
+
+void compute_rect();
+
+void compute_square();
+
+void send_buff_animation(uint8_t* buffer);
+
+void init_buffers();
+
+void check_animation();
+
+void square_display();
+
+void rectangle_display();
+
+void shape_display_image(uint8_t* arr);
 
 #endif /* OLED_H_ */
+

@@ -5,7 +5,8 @@ source/oled.o source/oled.d: ../source/oled.c ../source/oled.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/core_cmInstr.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/cmsis_gcc.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/core_cmFunc.h \
- /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/system_MKL25Z4.h
+ /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/system_MKL25Z4.h \
+ ../source/animation_lookup_table.h ../source/image_lookup_table.h
 
 ../source/oled.h:
 
@@ -22,3 +23,7 @@ source/oled.o source/oled.d: ../source/oled.c ../source/oled.h \
 /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/core_cmFunc.h:
 
 /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/system_MKL25Z4.h:
+
+../source/animation_lookup_table.h:
+
+../source/image_lookup_table.h:

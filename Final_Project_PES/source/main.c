@@ -24,30 +24,23 @@ int main(void)
 	init_i2c();
 	init_display();
 
-	//I2C1->C1 &= ~I2C_C1_IICEN(1);
-
-	clear_display();
-
 	fill_display();
 
 	clear_display();
 
-	/*char* input_str = NULL;
-	char array_input[256];*/
+	uint8_t arr;
+	shape_display_image(&arr);
+
+	char* input_str = NULL;
+	char array_input[256];
 
 	printf("Welcome to BreakfastSerial! \n\r");
 
-	/*toggle_pixel(0,0,1);
-	toggle_pixel(127,63,0);
-	toggle_pixel(53,24,0);*/
-
-	shape_display();
-
-	uint8_t i =0;
-
 	 while(1)
 	 {
-		 i++;
+		printf("? ");
+		input_str= copy_gets(&(array_input[0]));
+		process_command(input_str);
 	 }
 
 	  return 0 ;

@@ -7,7 +7,8 @@ source/command_processor.o source/command_processor.d: \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/core_cmFunc.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/system_MKL25Z4.h \
  ../source/sysclock.h ../source/command_processor.h ../source/cbfifo.h \
- ../source/uart.h ../source/hexdump.h
+ ../source/uart.h ../source/hexdump.h ../source/image_lookup_table.h \
+ ../source/oled.h
 
 /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/MKL25Z4.h:
 
@@ -30,3 +31,7 @@ source/command_processor.o source/command_processor.d: \
 ../source/uart.h:
 
 ../source/hexdump.h:
+
+../source/image_lookup_table.h:
+
+../source/oled.h:
