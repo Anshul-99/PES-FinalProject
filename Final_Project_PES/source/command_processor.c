@@ -37,24 +37,14 @@
 #define STR2 "Help"
 
 #define STR3 "Display"
-//#define STR4 "Display Rectangle"
-//#define STR5 "Display Fish"
-//#define STR6 "Display Oval"
-
 #define STR4 "Print"
-//#define STR8 "Print Rectangle"
-//#define STR9 "Print Fish"
-//#define STR10 "Print Oval"
-
 #define STR5 "Draw"
-//#define STR12 "Draw Rectangle"
+#define STR6 "Show"
 
-#define STR6 "Show check_gif"
-
-
+#define STR7 "Clear"
+#define STR8 "Fill"
 
 #define AUTHOR_NAME "Anshul Somani"
-
 
 #define HELP_AUTHOR "1. Author <None> : \n\r Arguments: None\n\r Action: It prints the name of the user\n\r"
 #define HELP_HELP "2. Help <None> : \n\r Arguments: None\n\r Action: It prints information regarding all the supported commands.\n\r"
@@ -62,6 +52,9 @@
 #define HELP_PRINT "4. Print <Shape> : \n\r Arguments: String with the name of the object. Supported objects: square, rectangle, oval & fish.\n\r Action: It prints the object on the OLED display.\n\r"
 #define HELP_DRAW "5. Draw <Shape> : \n\r Arguments: String with the name of the object. Supported objects: square & rectangle.\n\r Action: It draws the object on the OLED display pixel by pixel.\n\r"
 #define HELP_SHOW "6. Show <Shape> : \n\r Arguments: String with the name of the object. Supported objects: check_gif.\n\r Action: It shows the appropriate animation.\n\r"
+#define HELP_CLEAR "7. Clear <None> : \n\r Arguments: None\n\r Action: Clears the OLED display.\n\r"
+#define HELP_FILL "8. Fill <None> : \n\r Arguments: None\n\r Action: Switches on all the pixels on the OLED display\n\r"
+
 
 typedef void (*command_handler_t)(int, char *argv[]); // dcreate a funciton pointer definition
 
@@ -78,9 +71,11 @@ static const command_table_t commands[] =  // command table containing all the r
 		{ STR1, &display_name, HELP_AUTHOR},
 		{ STR2, &display_help, HELP_HELP},
 		{ STR3, &display_shape, HELP_DISPLAY},
-		{ STR4, &display_shape, HELP_DISPLAY},
+		{ STR4, &display_shape, HELP_PRINT},
 		{ STR5, &display_draw, HELP_DRAW},
 		{ STR6, &display_gif, HELP_SHOW},
+		{ STR7, &display_clear, HELP_CLEAR},
+		{ STR8, &display_fill, HELP_FILL},
 };
 
 
@@ -106,38 +101,63 @@ void display_name()
 
 void display_shape(int argc, char* argv[])
 {
-	if(strcasecmp(argv[1], "SQUARE"))
+	if(!(strcasecmp(argv[1], "SQUARE")))
 	{
 		square_display();
 	}
-	else if(strcasecmp(argv[1], "RECTANGLE"))
+	else if(!(strcasecmp(argv[1], "RECTANGLE")))
 	{
 		rectangle_display();
 	}
-	else if(strcasecmp(argv[1], "OVAL"))
+	else if(!(strcasecmp(argv[1], "OVAL")))
 	{
 		shape_display_image(&shape_oval[0]);
+	}
+	else
+	{
+		printf("unknown object\n\r");
+		display_help();
 	}
 }
 
 void display_draw(int argc, char* argv[])
 {
-	if(strcasecmp(argv[1], "SQUARE"))
+	if(!(strcasecmp(argv[1], "SQUARE")))
 	{
 		draw_square();
 	}
-	else if(strcasecmp(argv[1], "RECTANGLE"))
+	else if(!(strcasecmp(argv[1], "RECTANGLE")))
 	{
 		draw_rectangle();
+	}
+	else
+	{
+		printf("unknown object\n\r");
+		display_help();
 	}
 }
 
 void display_gif(int argc, char* argv[])
 {
-	if(strcasecmp(argv[1], "CHECK_GIF"))
+	if(!(strcasecmp(argv[1], "CHECK_GIF")))
 	{
 		check_animation();
 	}
+	else
+	{
+		printf("unknown object\n\r");
+		display_help();
+	}
+}
+
+void display_clear()
+{
+	clear_display();
+}
+
+void display_fill()
+{
+	fill_display();
 }
 
 void process_command(char *input)

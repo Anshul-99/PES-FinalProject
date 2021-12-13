@@ -4,12 +4,12 @@ oled.c:91:6:compute_square	16	static
 oled.c:110:6:init_buffers	8	static
 oled.c:119:6:clear_display	16	static
 oled.c:138:6:fill_display	16	static
-oled.c:157:6:toggle_pixel	48	static
+oled.c:157:6:toggle_pixel	40	static
 oled.c:211:6:generate_buffer	32	static
 oled.c:244:6:check_animation	8	static
 oled.c:289:6:square_display	16	static
 oled.c:310:6:rectangle_display	16	static
 oled.c:331:6:shape_display_image	32	static
-oled.c:363:6:send_buff_animation	32	static
-oled.c:381:6:draw_square	16	static
-oled.c:397:6:draw_rectangle	16	static
+oled.c:367:6:send_buff_animation	32	static
+oled.c:385:6:draw_square	16	static
+oled.c:403:6:draw_rectangle	16	static

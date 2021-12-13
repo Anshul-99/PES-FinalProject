@@ -64,4 +64,8 @@ void display_draw(int argc, char* argv[]);
 
 void display_gif(int argc, char* argv[]);
 
+void display_fill();
+
+void display_clear();
+
 #endif /* COMMAND_PROCESSOR_H_ */

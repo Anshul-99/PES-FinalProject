@@ -28,9 +28,6 @@ int main(void)
 
 	clear_display();
 
-	uint8_t arr;
-	shape_display_image(&arr);
-
 	char* input_str = NULL;
 	char array_input[256];
 

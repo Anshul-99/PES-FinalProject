@@ -14,11 +14,11 @@
 
 #define TOTAL_BYTES 2048
 
-uint8_t table_pixel[TOTAL_BYTES];
+ uint8_t table_pixel[TOTAL_BYTES];
 
-uint8_t square_buff[TOTAL_BYTES];
+ uint8_t square_buff[TOTAL_BYTES];
 
-uint8_t rect_buff[TOTAL_BYTES];
+ uint8_t rect_buff[TOTAL_BYTES];
 
 void init_display()
 {
@@ -185,7 +185,7 @@ void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
 
 	uint8_t data = 0x01<<pixel;
 
-	printf("page: %d, col: %d, pixel: %d, data: %d\n\r", page,col,pixel, data);
+	//printf("page: %d, col: %d, pixel: %d, data: %d\n\r", page,col,pixel, data);
 
 	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
 	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
@@ -358,6 +358,10 @@ void shape_display_image(uint8_t* arr)
 		write_data(DEV_ADD_WRITE, DATA_, arr[i]);
 		write_data(DEV_ADD_WRITE, DATA_, 0x00);
 	}
+	for(uint16_t i =0; i<(512*3); i++)
+	{
+		write_data(DEV_ADD_WRITE, DATA_, 0x00);
+	}
 }
 
 void send_buff_animation(uint8_t* buffer)
@@ -381,6 +385,7 @@ void send_buff_animation(uint8_t* buffer)
 void draw_square()
 {
 	clear_display();
+
 	for(uint8_t i = 16; i<32;i++)
 	{
 		toggle_pixel(i,8,1);
@@ -392,11 +397,13 @@ void draw_square()
 		toggle_pixel(16,j,1);
 		toggle_pixel(31,j,1);
 	}
+	memset(&table_pixel[0], 0, TOTAL_BYTES);
 }
 
 void draw_rectangle()
 {
 	clear_display();
+
 	for(uint8_t i = 16; i<32;i++)
 	{
 		toggle_pixel(i,8,1);
@@ -408,6 +415,7 @@ void draw_rectangle()
 		toggle_pixel(16,j,1);
 		toggle_pixel(31,j,1);
 	}
+	memset(&table_pixel[0], 0, TOTAL_BYTES);
 }
 
 
