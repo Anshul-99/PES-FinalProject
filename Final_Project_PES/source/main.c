@@ -44,7 +44,7 @@ int main(void)
 	char* input_str = NULL;
 	char array_input[256];
 
-	printf("Welcome to BreakfastSerial! \n\r");
+	printf("Welcome! \n\r");
 
 	 while(1)
 	 {
