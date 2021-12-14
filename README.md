@@ -2,6 +2,9 @@
 
 This repo contains code to display shapes, images and animation on a 128x64 OLED display. 
 
+Link to demo video and screenshots:
+https://drive.google.com/drive/folders/1E_zTZ0C1VG2NjpBQO8Ci6BrM9ni8bUDk?usp=sharing
+
 The OLED display used for this project is a 128x64 OLED display. It has SSD1315 as its OLED driver/controller. It uses I2C for communication. 
 Initially I had planned using a 64x48 OLED display from sparkfun that used SPI. It stopped working and I had to switch to this display. I hace added links to both the displays. 
 
