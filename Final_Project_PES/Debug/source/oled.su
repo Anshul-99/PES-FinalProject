@@ -1,6 +1,6 @@
 oled.c:39:6:init_oled	8	static
 oled.c:87:6:init_data_oled	8	static
-oled.c:92:6:clear_oled	16	static
-oled.c:115:6:fill_oled	16	static
-oled.c:135:6:toggle_pixel_oled	32	static
-oled.c:252:6:send_animation_buff	32	static
+oled.c:101:6:clear_oled	16	static
+oled.c:125:6:fill_oled	16	static
+oled.c:146:6:toggle_pixel_oled	32	static
+oled.c:264:6:send_animation_buff	32	static

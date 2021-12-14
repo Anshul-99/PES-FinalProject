@@ -42,65 +42,6 @@ uint8_t square_buff[TOTAL_BYTES];
  */
 uint8_t rect_buff[TOTAL_BYTES];
 
-/*
- * Computes the buffer to display animage of square on the OLED display.
- *
- * Parameters:
- *   none
- *
- * Returns:
- *   void
- */
-void compute_rect()
-{
-	memset(&rect_buff[0],0,TOTAL_BYTES); /* Clear the buffer of anything garbage values */
-
-	for(uint8_t i =16 ; i<32; i++) /* generate the vertical lines */
-	{
-		generate_buffer(i,8, &rect_buff[0]);
-		generate_buffer(i,23, &rect_buff[0]);
-	}
-
-	for(uint8_t j =8 ; j<24; j++) /* generate the horizontal lines */
-	{
-		generate_buffer(16, j, &rect_buff[0]);
-		generate_buffer(31, j, &rect_buff[0]);
-	}
-}
-
-/*
- * Computes the buffer to display an image of rectangle on the OLED display.
- *
- * Parameters:
- *   none
- *
- * Returns:
- *   void
- */
-void compute_square()
-{
-	memset(&square_buff[0],0,TOTAL_BYTES); /* Clear the buffer of anything garbage values */
-
-	for(uint8_t i =16 ; i<32; i++) /* generate the vertical lines */
-	{
-		generate_buffer(i,8, &square_buff[0]);
-		generate_buffer(i,15, &square_buff[0]);
-	}
-
-	for(uint8_t j =8 ; j<16; j++) /* generate the horizontal lines */
-	{
-		generate_buffer(16, j, &square_buff[0]);
-		generate_buffer(31, j, &square_buff[0]);
-	}
-}
-
-void init_buffers()
-{
-	/* compute the buffers before the shapes have to be displayed */
-	compute_square();
-	compute_rect();
-}
-
 void generate_buffer(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t* arr)
 {
 	/* The display is divided into 8 horizontal rows called 'pages' and
@@ -167,21 +108,73 @@ void generate_buffer(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t* arr)
 	arr[page + (col*16)] |= data;
 }
 
+/*
+ * Computes the buffer to display animage of square on the OLED display.
+ *
+ * Parameters:
+ *   none
+ *
+ * Returns:
+ *   void
+ */
+void compute_rect()
+{
+	memset(&rect_buff[0],0,TOTAL_BYTES); /* Clear the buffer of anything garbage values */
+
+	for(uint8_t i =16 ; i<32; i++) /* generate the vertical lines */
+	{
+		generate_buffer(i,8, &rect_buff[0]);
+		generate_buffer(i,23, &rect_buff[0]);
+	}
+
+	for(uint8_t j =8 ; j<24; j++) /* generate the horizontal lines */
+	{
+		generate_buffer(16, j, &rect_buff[0]);
+		generate_buffer(31, j, &rect_buff[0]);
+	}
+}
+
+/*
+ * Computes the buffer to display an image of rectangle on the OLED display.
+ *
+ * Parameters:
+ *   none
+ *
+ * Returns:
+ *   void
+ */
+void compute_square()
+{
+	memset(&square_buff[0],0,TOTAL_BYTES); /* Clear the buffer of anything garbage values */
+
+	for(uint8_t i =16 ; i<32; i++) /* generate the vertical lines */
+	{
+		generate_buffer(i,8, &square_buff[0]);
+		generate_buffer(i,15, &square_buff[0]);
+	}
+
+	for(uint8_t j =8 ; j<16; j++) /* generate the horizontal lines */
+	{
+		generate_buffer(16, j, &square_buff[0]);
+		generate_buffer(31, j, &square_buff[0]);
+	}
+}
+
+void init_buffers()
+{
+	/* compute the buffers before the shapes have to be displayed */
+	compute_square();
+	compute_rect();
+}
+
+
+
 void check_animation()
 {
 	/* clear display */
 	clear_oled();
 
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 	/* Send the frames for the animation to the display. Initially the plan was to send the
 	 * frames after a time interval calculated using a timer. The transmit and refresh speed is
@@ -223,16 +216,7 @@ void square_display()
 	/* clear display */
 	clear_oled();
 
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 	/* transmit the buffer containing the values for a square shape to the display*/
 	for(uint16_t j =0; j<TOTAL_BYTES; j++)
@@ -246,16 +230,7 @@ void rectangle_display()
 	/* clear display */
 	clear_oled();
 
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 	/* transmit the buffer containing the values for a rectangle shape to the display*/
 	for(uint16_t j =0; j<TOTAL_BYTES; j++)
@@ -269,16 +244,7 @@ void shape_display_image(uint8_t* arr)
 	/* clear display */
 	clear_oled();
 
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 	/*for(uint16_t i =0; i<512; i++)
 	{

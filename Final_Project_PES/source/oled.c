@@ -86,14 +86,6 @@ void init_oled()
 
 void init_data_oled()
 {
-
-}
-
-void clear_oled()
-{
-	/* To ensure that any pixels that were toggled are not toggled later on.
-	 * Helps ensure that the toggled pixels don't display in the middle of any animation, shape, image.*/
-	memset(&table_pixel[0], 0, TOTAL_BYTES);
 	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
 	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
 
@@ -104,6 +96,15 @@ void clear_oled()
 	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
 	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
 	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+}
+
+void clear_oled()
+{
+	/* To ensure that any pixels that were toggled are not toggled later on.
+	 * Helps ensure that the toggled pixels don't display in the middle of any animation, shape, image.*/
+	memset(&table_pixel[0], 0, TOTAL_BYTES);
+
+	init_data_oled();
 
 	/* Send 2048 bytes to clear the entire screen */
 	for(uint16_t i =0; i<TOTAL_BYTES;i++)
@@ -114,16 +115,7 @@ void clear_oled()
 
 void fill_oled()
 {
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 	/* Send 2048 bytes to fill the entire screen */
 	for(uint16_t i =0; i<TOTAL_BYTES;i++)
@@ -228,17 +220,7 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
 		break;
 	}
 
-
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+	init_data_oled();
 
 
 
