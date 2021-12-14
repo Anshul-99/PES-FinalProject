@@ -313,15 +313,15 @@ void draw_square()
 	/* draw the vertical lines, pixel by pixel. */
 	for(uint8_t i = 16; i<32;i++)
 	{
-		toggle_pixel_oled(i,8,1);
-		toggle_pixel_oled(i,15,1);
+		toggle_pixel_oled(i,8,ON);
+		toggle_pixel_oled(i,15,ON);
 	}
 
 	/* draw the horizontal lines, pixel by pixel.*/
 	for(uint8_t j = 8; j<16;j++)
 	{
-		toggle_pixel_oled(16,j,1);
-		toggle_pixel_oled(31,j,1);
+		toggle_pixel_oled(16,j,ON);
+		toggle_pixel_oled(31,j,ON);
 	}
 }
 
@@ -333,14 +333,14 @@ void draw_rectangle()
 	/* draw the vertical lines, pixel by pixel. */
 	for(uint8_t i = 16; i<32;i++)
 	{
-		toggle_pixel_oled(i,8,1);
-		toggle_pixel_oled(i,23,1);
+		toggle_pixel_oled(i,8,ON);
+		toggle_pixel_oled(i,23,ON);
 	}
 
 	/* draw the horizontal lines, pixel by pixel.*/
 	for(uint8_t j = 8; j<24;j++)
 	{
-		toggle_pixel_oled(16,j,1);
-		toggle_pixel_oled(31,j,1);
+		toggle_pixel_oled(16,j,ON);
+		toggle_pixel_oled(31,j,ON);
 	}
 }

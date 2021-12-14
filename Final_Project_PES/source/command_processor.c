@@ -44,6 +44,7 @@
 
 #define STR7 "Clear"
 #define STR8 "Fill"
+#define STR9 "Toggle_pixel"
 
 #define AUTHOR_NAME "Anshul Somani"
 
@@ -55,7 +56,10 @@
 #define HELP_SHOW "6. Show <Shape> : \n\r Arguments: String with the name of the object. Supported objects: check_gif.\n\r Action: It shows the appropriate animation.\n\r"
 #define HELP_CLEAR "7. Clear <None> : \n\r Arguments: None\n\r Action: Clears the OLED display.\n\r"
 #define HELP_FILL "8. Fill <None> : \n\r Arguments: None\n\r Action: Switches on all the pixels on the OLED display\n\r"
+#define HELP_TOGGLE "9. Toggle_pixel <X co-ordinate> <y co-ordinate> <pixel state> : \n\r Arguments: It takes the x co-ordinate, y co-ordinate and pixel state(ON/OFF).\n\r Action: It switches ON/OFF the relevent pixel on the OLED. (0,0) is at the bottom left corner. So all the pixels are in the 1st quadrant. Y goes from 0-31 and X goes from 0-127.\n\r"
 
+#define ZERO_ASCII 0x30
+#define NINE_ASCII 0x39
 
 typedef void (*command_handler_t)(int, char *argv[]); // dcreate a funciton pointer definition
 
@@ -77,6 +81,7 @@ static const command_table_t commands[] =  // command table containing all the r
 		{ STR6, &gif_func, HELP_SHOW},
 		{ STR7, &clear_func, HELP_CLEAR},
 		{ STR8, &fill_func, HELP_FILL},
+		{ STR9, &toggle_func, HELP_TOGGLE}
 };
 
 
@@ -116,6 +121,10 @@ void shape_func(int argc, char* argv[])
 	else if(!(strcasecmp(argv[1], "OVAL")))
 	{
 		shape_display_image(&shape_oval[0]);
+	}
+	else if(!(strcasecmp(argv[1], "FISH")))
+	{
+		shape_display_image(&shape_fish_32[0]);
 	}
 	/* If the argument doesn't match anything. Send the error message. */
 	else
@@ -170,6 +179,29 @@ void fill_func()
 {
 	/* Fill the screen */
 	fill_oled();
+}
+
+void toggle_func(int argc, char* argv[])
+{
+	uint8_t x = char_to_int(argv[1]);
+	uint8_t y = char_to_int(argv[2]);
+	uint8_t state;
+	if(strcasecmp(argv[3], "ON") == 0)
+	{
+		state = ON;
+	}
+	else if(strcasecmp(argv[3], "OFF") == 0)
+	{
+		state = OFF;
+	}
+	else
+	{
+		state = OFF;
+		printf("Invalid state\n\r");
+		return;
+	}
+
+	toggle_pixel_oled(x,y,state);
 }
 
 void process_command(char *input)

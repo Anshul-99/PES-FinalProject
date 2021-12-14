@@ -36,4 +36,16 @@
 
 void hexdump(int argc, char* argv[]);
 
+/*
+ * Converts numerical values in a string to integer format
+ *
+ * Parameters:
+ *   char* input: contains the numerical value in char format
+ *
+ * Returns:
+ *   uint16_t : numerical value in integer format.
+ */
+
+uint16_t char_to_int(char* input);
+
 #endif /* HEXDUMP_H_ */

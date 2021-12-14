@@ -1,8 +1,9 @@
-command_processor.c:86:6:help_func	16	static
-command_processor.c:98:6:name_func	8	static
-command_processor.c:103:6:shape_func	16	static
-command_processor.c:128:6:draw_func	16	static
-command_processor.c:148:6:gif_func	16	static
-command_processor.c:163:6:clear_func	8	static
-command_processor.c:169:6:fill_func	8	static
-command_processor.c:175:6:process_command	88	static
+command_processor.c:91:6:help_func	16	static
+command_processor.c:103:6:name_func	8	static
+command_processor.c:108:6:shape_func	16	static
+command_processor.c:137:6:draw_func	16	static
+command_processor.c:157:6:gif_func	16	static
+command_processor.c:172:6:clear_func	8	static
+command_processor.c:178:6:fill_func	8	static
+command_processor.c:184:6:toggle_func	24	static
+command_processor.c:207:6:process_command	88	static

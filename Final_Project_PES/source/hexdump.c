@@ -26,16 +26,6 @@
 #define ZERO_ASCII 0x30
 #define NINE_ASCII 0x39
 
-/*
- * Converts numerical values in a string to integer format
- *
- * Parameters:
- *   char* input: contains the numerical value in char format
- *
- * Returns:
- *   uint16_t : numerical value in integer format.
- */
-
 uint16_t char_to_int(char* input)
 {
 	uint8_t cntr = 0;

@@ -26,6 +26,7 @@
 #include "oled.h"
 #include "i2c.h"
 #include <string.h>
+#include <stdio.h>
 
 /* The buffer sent to OLED to control pixels. It keeps information regarding
  * which pixel is supposed to be ON and which are supposed to be OFF*/
@@ -161,6 +162,23 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
 	 * The co-ordinates entered by the user is converted to the col, page
 	 * and the particular pixel on the byte mapped to that page.
 	 */
+
+	if(!((x_coordinate>=0)&&(x_coordinate<128)))
+	{
+		printf("Invalid X co-ordinate\n\r");
+		return;
+	}
+	else if(!((y_coordinate>=0)&&(y_coordinate<32)))
+	{
+		printf("Invalid Y co-ordinate\n\r");
+		return;
+	}
+	else if ((state !=0)&&(state !=1))
+	{
+		printf("Invalid state\n\r");
+		return;
+	}
+
 	volatile uint8_t page = 0;
 	volatile uint8_t col =0;
 	volatile uint8_t pixel =0;
@@ -191,7 +209,25 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
 
 	col = x_coordinate;
 
-	uint8_t data = 0x01<<pixel;
+	uint8_t data = 0;
+	switch(state)
+	{
+	case ON:
+		 data = 0x01<<pixel;
+
+		/* sets 1 for the bit that maps to the pixel and
+		 * sends the entire byte to the display */
+		table_pixel[page + (col*16)] |= data;
+		break;
+	case OFF:
+		data = ~(0x01<<pixel);
+
+		/* sets  0 for the bit that maps to the pixel and
+		 * sends the entire byte to the display */
+		table_pixel[page + (col*16)] &= data;
+		break;
+	}
+
 
 	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
 	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
@@ -204,9 +240,7 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
 	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
 	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
 
-    /* sets 1 or 0 for the bit that maps to the pixel and
-     * sends the entire byte to the display */
-	table_pixel[page + (col*16)] |= data;
+
 
 	for(uint16_t i = 0; i<TOTAL_BYTES; i++)
 	{

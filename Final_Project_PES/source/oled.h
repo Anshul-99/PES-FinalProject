@@ -68,6 +68,9 @@
 
 #define TOTAL_BYTES 2048 /* Total number of bytes needed to control the entire OLED screen */
 
+enum pixel_state{OFF, ON};
+//enum state pixel_state;
+
 /*
  * Initializes the OLED display before anything can be displayed on it.
  *

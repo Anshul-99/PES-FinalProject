@@ -116,4 +116,16 @@ void fill_func();
  */
 void clear_func();
 
+/*
+ * toggles a pixel ON/OFF
+ *
+ * Parameters:
+ *   int argc: number of tokens in the command.
+ *   char* argv[]: array of all the tokens in the command.
+ *
+ * Returns:
+ *   void
+ */
+void toggle_func(int argc, char* argv[]);
+
 #endif /* COMMAND_PROCESSOR_H_ */
