@@ -8,7 +8,7 @@ source/main.o source/main.d: ../source/main.c \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/cmsis_gcc.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/core_cmFunc.h \
  /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/CMSIS/system_MKL25Z4.h \
- ../source/cbfifo.h ../source/i2c.h ../source/oled.h
+ ../source/cbfifo.h ../source/i2c.h ../source/oled.h ../source/display.h
 
 /home/anshul/CU/Courses/PES/Workspace_PES/Final_Project_PES/source/command_processor.h:
 
@@ -33,3 +33,5 @@ source/main.o source/main.d: ../source/main.c \
 ../source/i2c.h:
 
 ../source/oled.h:
+
+../source/display.h:

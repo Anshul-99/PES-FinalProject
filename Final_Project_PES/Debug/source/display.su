@@ -1,0 +1,10 @@
+display.c:54:6:compute_rect	16	static
+display.c:80:6:compute_square	16	static
+display.c:97:6:init_buffers	8	static
+display.c:104:6:generate_buffer	32	static
+display.c:170:6:check_animation	8	static
+display.c:221:6:square_display	16	static
+display.c:244:6:rectangle_display	16	static
+display.c:267:6:shape_display_image	32	static
+display.c:308:6:draw_square	16	static
+display.c:328:6:draw_rectangle	16	static

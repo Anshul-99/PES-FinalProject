@@ -1,21 +1,26 @@
-/*
- * i2c.c
- *
- *  Created on: 07-Dec-2021
- *      Author: anshul
- */
+/*****************************************************************************
+​ * ​ ​ Copyright​ ​ (C)​ ​ 2021​ ​ by​ ​ Anshul Somani
+​ *
+​ * ​ ​ Redistribution,​ ​ modification​ ​ or​ ​ use​ ​ of​ ​ this​ ​ software​ ​ in​ ​ source​ ​ or​ ​ binary
+​ * ​ ​ forms​ ​ is​ ​ permitted​ ​ as​ ​ long​ ​ as​ ​ the​ ​ files​ ​ maintain​ ​ this​ ​ copyright.​ ​ Users​ ​ are
+​ * ​ ​ permitted​ ​ to​ ​ modify​ ​ this​ ​ and​ ​ use​ ​ it​ ​ to​ ​ learn​ ​ about​ ​ the​ ​ field​ ​ of​ ​ embedded
+​ * ​ ​ software.​ ​ Anshul Somani ​ and​ ​ the​ ​ University​ ​ of​ ​ Colorado​ ​ are​ ​ not​ ​ liable​ ​ for
+​ * ​ ​ any​ ​ misuse​ ​ of​ ​ this​ ​ material.
+​ *
+*****************************************************************************/
+/**
+​ * ​ ​ @file​ ​ i2c.c
+​ * ​ ​ @brief​ ​ This file implements all the functions necessary to use I2C protocol.
+​ *
+​ * ​ ​ @author​ ​ Anshul Somani
+​ * ​ ​ @date​ ​ December 7 2021
+​ * ​ ​ @version​ ​ 1.0
+​ *
+​ */
 
 #include "i2c.h"
 #include "MKL25Z4.h"
 #include "sysclock.h"
-
-
-/*
- *
- * address = 0x78 = 0b0111 1000
- * after adding write bit at lsb,
- * address = 0xF0 = 0b1111 0000
- */
 
 int lock_detect=0;
 int i2c_lock=0;
@@ -31,69 +36,47 @@ void init_i2c()
 	I2C1->F = (I2C_F_ICR(0x12) | I2C_F_MULT(0)); //ICR can be 0x12 as well
 
 	I2C1->C1 |= I2C_C1_IICEN(1); // Enable I2C peripheral
-
-	// Select high drive mode
-	//I2C1->C2 |= (I2C_C2_HDRS_MASK);
-}
-
-void start_signal()
-{
-	I2C1->C1 |= I2C_C1_TX(1)| // Transmit mode
-				I2C_C1_MST(1); // Master mode
 }
 
 
-void stop_signal()
-{
-	I2C1->C1 &= ~(I2C_C1_MST(1)|I2C_C1_TX(1)); // slave mode and receive mode.
-}
-
-/* From Dean's code */
 void i2c_busy(void){
-	// Start Signal
+
 	lock_detect=0;
-	I2C1->C1 &= ~I2C_C1_IICEN_MASK;
+	I2C1->C1 &= ~I2C_C1_IICEN_MASK; /* Disable interrupts */
 	I2C_TRAN;
-	I2C_M_START;
-	I2C1->C1 |=  I2C_C1_IICEN_MASK;
+	I2C_M_START; // Start Signal
+	I2C1->C1 |=  I2C_C1_IICEN_MASK; /* Enable interrupts */
 	// Write to clear line
 	I2C1->C1 |= I2C_C1_MST_MASK; /* set MASTER mode */
 	I2C1->C1 |= I2C_C1_TX_MASK; /* Set transmit (TX) mode */
 	I2C1->D = 0xFF;
 	while ((I2C1->S & I2C_S_IICIF_MASK) == 0U) {
-	} /* wait interrupt */
+	} /* wait for interrupt bit to be set */
 	I2C1->S |= I2C_S_IICIF_MASK; /* clear interrupt bit */
 
-
-							/* Clear arbitration error flag*/
+	/* Clear arbitration error flag*/
 	I2C1->S |= I2C_S_ARBL_MASK;
 
-
-							/* Send start */
-	I2C1->C1 &= ~I2C_C1_IICEN_MASK;
+	/* Send start */
+	I2C1->C1 &= ~I2C_C1_IICEN_MASK; /* Disable interrupts */
 	I2C1->C1 |= I2C_C1_TX_MASK; /* Set transmit (TX) mode */
 	I2C1->C1 |= I2C_C1_MST_MASK; /* START signal generated */
 
 	I2C1->C1 |= I2C_C1_IICEN_MASK;
-							/*Wait until start is send*/
 
-							/* Send stop */
 	I2C1->C1 &= ~I2C_C1_IICEN_MASK;
 	I2C1->C1 |= I2C_C1_MST_MASK;
 	I2C1->C1 &= ~I2C_C1_MST_MASK; /* set SLAVE mode */
 	I2C1->C1 &= ~I2C_C1_TX_MASK; /* Set Rx */
 	I2C1->C1 |= I2C_C1_IICEN_MASK;
 
-
-								/* wait */
-							/* Clear arbitration error & interrupt flag*/
+	/* Clear arbitration error & interrupt flag*/
 	I2C1->S |= I2C_S_IICIF_MASK;
 	I2C1->S |= I2C_S_ARBL_MASK;
 	lock_detect=0;
 	i2c_lock=1;
 }
 
-/* From Dean's code*/
 void i2c_wait(void) {
 	lock_detect = 0;
 	while(((I2C1->S & I2C_S_IICIF_MASK)==0) & (lock_detect < 200)) {
@@ -104,17 +87,8 @@ void i2c_wait(void) {
 	I2C1->S |= I2C_S_IICIF_MASK;
 }
 
-void send_dev_add()
+void write_data(uint8_t dev, uint8_t address, uint8_t data)
 {
-	I2C_TRAN;
-	I2C_M_START;
-	I2C1->D = DEV_ADD_WRITE; // send device address
-	I2C_WAIT
-}
-
-int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
-{
-	/* From Dean's code */
 	I2C_TRAN;
 	I2C_M_START;
 	I2C_M_START;
@@ -128,9 +102,4 @@ int8_t write_data(uint8_t dev, uint8_t address, uint8_t data)
 	I2C_WAIT
 
 	I2C_M_STOP;
-
-	/*int k =5;
-	while(k--);*/
-
-	return 0;
 }

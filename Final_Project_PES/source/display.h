@@ -9,33 +9,25 @@
 ​ *
 *****************************************************************************/
 /**
-​ * ​ ​ @file​ ​ command_processor.h
-​ * ​ ​ @brief​ ​ This file implements a scheduler for a command processor using function pointers.
+​ * ​ ​ @file​ ​  display.h
+​ * ​ ​ @brief​ ​ This file implements functions that display shapes, images and animations
+ * 			 on the OLED display.
+ *     		 For this project, a 128x64 OLED display has been used. The OLED
+ *     		 driver/controller is SSD1315 but the code seems to be compatible
+ *     		 with OLED displays having the same resolution and SSD1306 as the
+ *     		 OLED driver/ controller.
 ​ *
 ​ * ​ ​ @author​ ​ Anshul Somani
-​ * ​ ​ @date​ ​ December 12 2021
-​ * ​ ​ @version​ ​ 2.0
+​ * ​ ​ @date​ ​ December 13 2021
+​ * ​ ​ @version​ ​ 1.0
 ​ *
 ​ */
 
-#ifndef COMMAND_PROCESSOR_H_
-#define COMMAND_PROCESSOR_H_
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
 
 /*
- * Converts string input from user to tokens
- * which are then used to perform the appropriate tasks
- *
- * Parameters:
- *   char* input: contains the input from the user
- *
- * Returns:
- *   void
- */
-
-void process_command(char *input);
-
-/*
- * Displays the help strings for all the supported commands
+ * Draws a square pixel by pixel as an animation.
  *
  * Parameters:
  *   none
@@ -43,11 +35,10 @@ void process_command(char *input);
  * Returns:
  *   void
  */
-
-void help_func();
+void draw_square();
 
 /*
- * Displays the author name
+ * Draws a rectangle pixel by pixel as an animation.
  *
  * Parameters:
  *   none
@@ -55,47 +46,10 @@ void help_func();
  * Returns:
  *   void
  */
-
-void name_func();
-
-/*
- * Displays a shape. The shape depends on the argument.
- *
- * Parameters:
- *   int argc: number of tokens in the command.
- *   char* argv[]: array of all the tokens in the command.
- *
- * Returns:
- *   void
- */
-void shape_func(int argc, char* argv[]);
+void draw_rectangle();
 
 /*
- * Draws a shape as an animation. The shape depends on the argument.
- *
- * Parameters:
- *   int argc: number of tokens in the command.
- *   char* argv[]: array of all the tokens in the command.
- *
- * Returns:
- *   void
- */
-void draw_func(int argc, char* argv[]);
-
-/*
- * Shows an animation based on the argument
- *
- * Parameters:
- *   int argc: number of tokens in the command.
- *   char* argv[]: array of all the tokens in the command.
- *
- * Returns:
- *   void
- */
-void gif_func(int argc, char* argv[]);
-
-/*
- * Fills the OLED display
+ * Initializes the buffers needed to generate static shapes.
  *
  * Parameters:
  *   none
@@ -103,10 +57,10 @@ void gif_func(int argc, char* argv[]);
  * Returns:
  *   void
  */
-void fill_func();
+void init_buffers();
 
 /*
- * Clears the OLED display
+ * Displays an animation of a tick mark that reappears.
  *
  * Parameters:
  *   none
@@ -114,6 +68,39 @@ void fill_func();
  * Returns:
  *   void
  */
-void clear_func();
+void check_animation();
 
-#endif /* COMMAND_PROCESSOR_H_ */
+/*
+ * Displays a square without any animation
+ *
+ * Parameters:
+ *   none
+ *
+ * Returns:
+ *   void
+ */
+void square_display();
+
+/*
+ * Displays a rectangle without any animation
+ *
+ * Parameters:
+ *   none
+ *
+ * Returns:
+ *   void
+ */
+void rectangle_display();
+
+/*
+ * Displays an image without any animation.
+ *
+ * Parameters:
+ *   none
+ *
+ * Returns:
+ *   void
+ */
+void shape_display_image(uint8_t* arr);
+
+#endif /* DISPLAY_H_ */

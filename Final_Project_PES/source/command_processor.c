@@ -13,8 +13,8 @@
 ​ * ​ ​ @brief​ ​ This file implements a scheduler for a command processor using function pointers.
 ​ *
 ​ * ​ ​ @author​ ​ Anshul Somani
-​ * ​ ​ @date​ ​ November 8 2021
-​ * ​ ​ @version​ ​ 1.0
+​ * ​ ​ @date​ ​ December 12 2021
+​ * ​ ​ @version​ ​ 2.0
 ​ *
 ​ */
 
@@ -31,6 +31,7 @@
 #include "hexdump.h"
 #include "image_lookup_table.h"
 #include "oled.h"
+#include "display.h"
 
 
 #define STR1 "Author"
@@ -68,21 +69,21 @@ typedef struct // Contains variables relevant to commands
 
 static const command_table_t commands[] =  // command table containing all the relevant commands
 {
-		{ STR1, &display_name, HELP_AUTHOR},
-		{ STR2, &display_help, HELP_HELP},
-		{ STR3, &display_shape, HELP_DISPLAY},
-		{ STR4, &display_shape, HELP_PRINT},
-		{ STR5, &display_draw, HELP_DRAW},
-		{ STR6, &display_gif, HELP_SHOW},
-		{ STR7, &display_clear, HELP_CLEAR},
-		{ STR8, &display_fill, HELP_FILL},
+		{ STR1, &name_func, HELP_AUTHOR},
+		{ STR2, &help_func, HELP_HELP},
+		{ STR3, &shape_func, HELP_DISPLAY},
+		{ STR4, &shape_func, HELP_PRINT},
+		{ STR5, &draw_func, HELP_DRAW},
+		{ STR6, &gif_func, HELP_SHOW},
+		{ STR7, &clear_func, HELP_CLEAR},
+		{ STR8, &fill_func, HELP_FILL},
 };
 
 
 static const int num_commands = // number of commands that are supported
   sizeof(commands) / sizeof(command_table_t);
 
-void display_help()
+void help_func()
 {
 	printf("These are all the supported commands:\n\r");
 	printf("All the commands are case insensitive.\n\r");
@@ -94,70 +95,81 @@ void display_help()
 	}
 }
 
-void display_name()
+void name_func()
 {
 	printf("%s\n\r", AUTHOR_NAME);
 }
 
-void display_shape(int argc, char* argv[])
+void shape_func(int argc, char* argv[])
 {
+	/* compare if the argument is square. If it is, display a square */
 	if(!(strcasecmp(argv[1], "SQUARE")))
 	{
 		square_display();
 	}
+	/* compare if the argument is rectangle. If it is, display a rectangle */
 	else if(!(strcasecmp(argv[1], "RECTANGLE")))
 	{
 		rectangle_display();
 	}
+	/* compare if the argument is oval. If it is, display an oval */
 	else if(!(strcasecmp(argv[1], "OVAL")))
 	{
 		shape_display_image(&shape_oval[0]);
 	}
+	/* If the argument doesn't match anything. Send the error message. */
 	else
 	{
-		printf("unknown object\n\r");
-		display_help();
+		printf("Unknown object\n\r");
+		printf("Enter help for a list of supported commands and objects.\n\r");
 	}
 }
 
-void display_draw(int argc, char* argv[])
+void draw_func(int argc, char* argv[])
 {
+	/* compare if the argument is square. If it is, display a square */
 	if(!(strcasecmp(argv[1], "SQUARE")))
 	{
 		draw_square();
 	}
+	/* compare if the argument is rectangle. If it is, display a rectangle */
 	else if(!(strcasecmp(argv[1], "RECTANGLE")))
 	{
 		draw_rectangle();
 	}
+	/* If the argument doesn't match anything. Send the error message. */
 	else
 	{
-		printf("unknown object\n\r");
-		display_help();
+		printf("Unknown object\n\r");
+		printf("Enter help for a list of supported commands and objects.\n\r");
 	}
 }
 
-void display_gif(int argc, char* argv[])
+void gif_func(int argc, char* argv[])
 {
+	/* compare if the argument is check_gif. If it is, display the relevant animation */
 	if(!(strcasecmp(argv[1], "CHECK_GIF")))
 	{
 		check_animation();
 	}
+	/* If the argument doesn't match anything. Send the error message. */
 	else
 	{
-		printf("unknown object\n\r");
-		display_help();
+		printf("Unknown object\n\r");
+		printf("Enter help for a list of supported commands and objects.\n\r");
 	}
 }
 
-void display_clear()
+void clear_func()
 {
-	clear_display();
+	/* Clear the screen */
+	clear_oled();
 }
 
-void display_fill()
+void fill_func()
 {
-	fill_display();
+	/* Fill the screen */
+	fill_oled();
 }
 
 void process_command(char *input)

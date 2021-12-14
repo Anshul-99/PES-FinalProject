@@ -6,6 +6,7 @@
 C_SRCS += \
 ../source/cbfifo.c \
 ../source/command_processor.c \
+../source/display.c \
 ../source/hexdump.c \
 ../source/i2c.c \
 ../source/main.c \
@@ -18,6 +19,7 @@ C_SRCS += \
 OBJS += \
 ./source/cbfifo.o \
 ./source/command_processor.o \
+./source/display.o \
 ./source/hexdump.o \
 ./source/i2c.o \
 ./source/main.o \
@@ -30,6 +32,7 @@ OBJS += \
 C_DEPS += \
 ./source/cbfifo.d \
 ./source/command_processor.d \
+./source/display.d \
 ./source/hexdump.d \
 ./source/i2c.d \
 ./source/main.d \

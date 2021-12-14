@@ -1,10 +1,22 @@
-/*
- * animation_lookup_table.h
- *
- *  Created on: 12-Dec-2021
- *      Author: anshul
- */
-
+/*****************************************************************************
+​ * ​ ​ Copyright​ ​ (C)​ ​ 2021​ ​ by​ ​ Anshul Somani
+​ *
+​ * ​ ​ Redistribution,​ ​ modification​ ​ or​ ​ use​ ​ of​ ​ this​ ​ software​ ​ in​ ​ source​ ​ or​ ​ binary
+​ * ​ ​ forms​ ​ is​ ​ permitted​ ​ as​ ​ long​ ​ as​ ​ the​ ​ files​ ​ maintain​ ​ this​ ​ copyright.​ ​ Users​ ​ are
+​ * ​ ​ permitted​ ​ to​ ​ modify​ ​ this​ ​ and​ ​ use​ ​ it​ ​ to​ ​ learn​ ​ about​ ​ the​ ​ field​ ​ of​ ​ embedded
+​ * ​ ​ software.​ ​ Anshul Somani ​ and​ ​ the​ ​ University​ ​ of​ ​ Colorado​ ​ are​ ​ not​ ​ liable​ ​ for
+​ * ​ ​ any​ ​ misuse​ ​ of​ ​ this​ ​ material.
+​ *
+*****************************************************************************/
+/**
+​ * ​ ​ @file​ ​ animation_lookup_table.h
+​ * ​ ​ @brief​ ​ This file contains arrays that store information for each frame in the animation.
+​ *
+​ * ​ ​ @author​ ​ Anshul Somani
+​ * ​ ​ @date​ ​ December 12 2021
+​ * ​ ​ @version​ ​ 1.0
+​ *
+​ */
 #ifndef ANIMATION_LOOKUP_TABLE_H_
 #define ANIMATION_LOOKUP_TABLE_H_
 

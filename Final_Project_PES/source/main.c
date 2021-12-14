@@ -12,22 +12,35 @@
 #include "cbfifo.h"
 #include "i2c.h"
 #include "oled.h"
+#include "display.h"
 
 #define DEBUG 1
 
 int main(void)
 {
+	/* initialize the system clock*/
 	sysclock_init();
 
+	/* initialize UART for communication with serial termnial*/
 	init_uart();
 
+	/* initialize I2C for communication with OLED display*/
 	init_i2c();
-	init_display();
 
-	fill_display();
+	/* initialize the OLED */
+	init_oled();
 
-	clear_display();
+	/* initialize a few buffers being used to display shapes
+	 * on the OLED display*/
+	init_buffers();
 
+	/* Test the OLED display to ensure that all the pixels are working
+	 * and it has been configured properly*/
+	fill_oled();
+
+	clear_oled();
+
+	/* Begin command processor */
 	char* input_str = NULL;
 	char array_input[256];
 

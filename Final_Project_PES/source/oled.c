@@ -1,26 +1,41 @@
-/*
- * oled.c
- *
- *  Created on: 10-Dec-2021
- *      Author: anshul
- */
+/*****************************************************************************
+​ * ​ ​ Copyright​ ​ (C)​ ​ 2021​ ​ by​ ​ Anshul Somani
+​ *
+​ * ​ ​ Redistribution,​ ​ modification​ ​ or​ ​ use​ ​ of​ ​ this​ ​ software​ ​ in​ ​ source​ ​ or​ ​ binary
+​ * ​ ​ forms​ ​ is​ ​ permitted​ ​ as​ ​ long​ ​ as​ ​ the​ ​ files​ ​ maintain​ ​ this​ ​ copyright.​ ​ Users​ ​ are
+​ * ​ ​ permitted​ ​ to​ ​ modify​ ​ this​ ​ and​ ​ use​ ​ it​ ​ to​ ​ learn​ ​ about​ ​ the​ ​ field​ ​ of​ ​ embedded
+​ * ​ ​ software.​ ​ Anshul Somani ​ and​ ​ the​ ​ University​ ​ of​ ​ Colorado​ ​ are​ ​ not​ ​ liable​ ​ for
+​ * ​ ​ any​ ​ misuse​ ​ of​ ​ this​ ​ material.
+​ *
+*****************************************************************************/
+/**
+​ * ​ ​ @file​ ​ oled.c
+​ * ​ ​ @brief​ ​ This file implements functions needed to initialize, configure
+ *     		 and then control the OLED display.
+ *     		 For this project, a 128x64 OLED display has been used. The OLED
+ *     		 driver/controller is SSD1315 but the code seems to be compatible
+ *     		 with OLED displays having the same resolution and SSD1306 as the
+ *     		 OLED driver/ controller.
+​ *
+​ * ​ ​ @author​ ​ Anshul Somani
+​ * ​ ​ @date​ ​ December 10 2021
+​ * ​ ​ @version​ ​ 1.0
+​ *
+​ */
 
 #include "oled.h"
 #include "i2c.h"
-#include <stdio.h>
 #include <string.h>
-#include "animation_lookup_table.h"
-#include "image_lookup_table.h"
 
-#define TOTAL_BYTES 2048
+/* The buffer sent to OLED to control pixels. It keeps information regarding
+ * which pixel is supposed to be ON and which are supposed to be OFF*/
 
- uint8_t table_pixel[TOTAL_BYTES];
+uint8_t table_pixel[TOTAL_BYTES];
 
- uint8_t square_buff[TOTAL_BYTES];
+#define CLEAR_SCREEN 0x00 /* Switches OFF all the pixels mapped to the display RAM that stores this value */
+#define FILL_SCREEN 0xFF /* Switches ON all the pixels mapped to the display RAM that stores this value */
 
- uint8_t rect_buff[TOTAL_BYTES];
-
-void init_display()
+void init_oled()
 {
 
 	write_data(DEV_ADD_WRITE, CMD, DISPLAY_OFF);
@@ -64,59 +79,39 @@ void init_display()
 
 	write_data(DEV_ADD_WRITE, CMD, DISPLAY_ON);
 
-	init_buffers();
-	clear_display();
+	clear_oled(); /* Clear the screen to begin from a clean slate */
 
 }
 
-void compute_rect()
+void init_data_oled()
 {
-	memset(&rect_buff[0],0,TOTAL_BYTES);
 
-	for(uint8_t i =16 ; i<32; i++)
-	{
-		generate_buffer(i,8, &rect_buff[0]);
-		generate_buffer(i,23, &rect_buff[0]);
-	}
-
-	for(uint8_t j =8 ; j<24; j++)
-	{
-		generate_buffer(16, j, &rect_buff[0]);
-		generate_buffer(31, j, &rect_buff[0]);
-	}
-
-//	shape_display(&rect_buff[0]);
 }
 
-void compute_square()
+void clear_oled()
 {
-	memset(&square_buff[0],0,TOTAL_BYTES);
-
-	for(uint8_t i =16 ; i<32; i++)
-	{
-		generate_buffer(i,8, &square_buff[0]);
-		generate_buffer(i,15, &square_buff[0]);
-	}
-
-	for(uint8_t j =8 ; j<16; j++)
-	{
-		generate_buffer(16, j, &square_buff[0]);
-		generate_buffer(31, j, &square_buff[0]);
-	}
-
-//	shape_display(&square_buff[0]);
-}
-
-void init_buffers()
-{
+	/* To ensure that any pixels that were toggled are not toggled later on.
+	 * Helps ensure that the toggled pixels don't display in the middle of any animation, shape, image.*/
 	memset(&table_pixel[0], 0, TOTAL_BYTES);
+	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
+	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
 
-	compute_square();
-	compute_rect();
+	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
+	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
+	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
 
+	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
+	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
+	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
+
+	/* Send 2048 bytes to clear the entire screen */
+	for(uint16_t i =0; i<TOTAL_BYTES;i++)
+	{
+		write_data(DEV_ADD_WRITE, DATA_, CLEAR_SCREEN);
+	}
 }
 
-void clear_display()
+void fill_oled()
 {
 	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
 	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
@@ -129,53 +124,66 @@ void clear_display()
 	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
 	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
 
+	/* Send 2048 bytes to fill the entire screen */
 	for(uint16_t i =0; i<TOTAL_BYTES;i++)
 	{
-		write_data(DEV_ADD_WRITE, DATA_, 0x00);
+		write_data(DEV_ADD_WRITE, DATA_, FILL_SCREEN);
 	}
 }
 
-void fill_display()
+void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
 {
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
-
-	for(uint16_t i =0; i<TOTAL_BYTES;i++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, 0xFF);
-	}
-}
-
-void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
-{
+	/* The display is divided into 8 horizontal rows called 'pages' and
+	 * 128 vertical columns called 'cols'. Each col has 64 pixels and each
+	 * page has 128*8 pages. Each byte maps to 1 col and 1 page.
+	 *
+	 * 			  col_0 			col_1 col_2 .....
+	 * page3&7    pixel1 of page 3
+	 * 			  pixel1 of page 7
+	 * 			  pixel2 of page 3
+	 * 			  pixel2 of page 7
+	 * 			  pixel3 of page 3
+	 * 			  pixel3 of page 7
+	 * 			  pixel4 of page 3
+	 * 			  pixel4 of page 7
+	 * 			  pixel5 of page 3
+	 * 			  pixel5 of page 7
+	 * 			  pixel6 of page 3
+	 * 			  pixel6 of page 7
+	 * 			  pixel7 of page 3
+	 * 			  pixel7 of page 7
+	 * 			  pixel8 of page 3
+	 * 			  pixel8 of page 7
+	 * page2&6
+	 * page1&5
+	 * page0&4
+	 *
+	 * The co-ordinates entered by the user is converted to the col, page
+	 * and the particular pixel on the byte mapped to that page.
+	 */
 	volatile uint8_t page = 0;
 	volatile uint8_t col =0;
 	volatile uint8_t pixel =0;
 
-	if((y_coordinate>=8)&&(y_coordinate< 16))
+	/* This logic is used to alternate between the pages. Only pages, 0,1,2,3 are accessed in this functionality.
+	 * This is because if the user enters (0,32), it maps page 4 that is present with page0. not with page3*/
+
+	if((y_coordinate>=8)&&(y_coordinate< 16)) /* page 1*/
 	{
 		page =  ((y_coordinate+8)/8);
 		pixel = (y_coordinate%8);
 	}
-	else if((y_coordinate>=16)&&(y_coordinate< 24))
+	else if((y_coordinate>=16)&&(y_coordinate< 24)) /* page 2*/
 	{
 		page =  ((y_coordinate+16)/8);
 		pixel = (y_coordinate%8);
 	}
-	else if((y_coordinate>=24)&&(y_coordinate< 32))
+	else if((y_coordinate>=24)&&(y_coordinate< 32)) /* page 3 */
 	{
 		page =  ((y_coordinate+24)/8);
 		pixel = (y_coordinate%8);
 	}
-	else
+	else /* page 0 */
 	{
 		page =  (y_coordinate/8);
 		pixel = (y_coordinate%8);
@@ -185,8 +193,6 @@ void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
 
 	uint8_t data = 0x01<<pixel;
 
-	//printf("page: %d, col: %d, pixel: %d, data: %d\n\r", page,col,pixel, data);
-
 	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
 	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
 
@@ -198,7 +204,8 @@ void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
 	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
 	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
 
-
+    /* sets 1 or 0 for the bit that maps to the pixel and
+     * sends the entire byte to the display */
 	table_pixel[page + (col*16)] |= data;
 
 	for(uint16_t i = 0; i<TOTAL_BYTES; i++)
@@ -208,170 +215,18 @@ void toggle_pixel(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state)
 
 }
 
-void generate_buffer(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t* arr)
+void send_animation_buff(uint8_t* buffer)
 {
-	volatile uint8_t page = 0;
-	volatile uint8_t col =0;
-	volatile uint8_t pixel =0;
-
-	if((y_coordinate>=8)&&(y_coordinate< 16))
-	{
-		page =  ((y_coordinate+8)/8);
-		pixel = (y_coordinate%8);
-	}
-	else if((y_coordinate>=16)&&(y_coordinate< 24))
-	{
-		page =  ((y_coordinate+16)/8);
-		pixel = (y_coordinate%8);
-	}
-	else if((y_coordinate>=24)&&(y_coordinate< 32))
-	{
-		page =  ((y_coordinate+24)/8);
-		pixel = (y_coordinate%8);
-	}
-	else
-	{
-		page =  (y_coordinate/8);
-		pixel = (y_coordinate%8);
-	}
-
-	col = x_coordinate;
-
-	uint8_t data = 0x01<<pixel;
-	arr[page + (col*16)] |= data;
-}
-
-void check_animation()
-{
-	clear_display();
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
-
-	send_buff_animation(&check_gif_0[0]);
-	send_buff_animation(&check_gif_1[0]);
-	send_buff_animation(&check_gif_2[0]);
-	send_buff_animation(&check_gif_3[0]);
-	send_buff_animation(&check_gif_4[0]);
-	send_buff_animation(&check_gif_5[0]);
-	send_buff_animation(&check_gif_6[0]);
-	send_buff_animation(&check_gif_7[0]);
-	send_buff_animation(&check_gif_8[0]);
-	send_buff_animation(&check_gif_9[0]);
-	send_buff_animation(&check_gif_10[0]);
-	send_buff_animation(&check_gif_11[0]);
-	send_buff_animation(&check_gif_12[0]);
-	send_buff_animation(&check_gif_13[0]);
-	send_buff_animation(&check_gif_14[0]);
-	send_buff_animation(&check_gif_15[0]);
-	send_buff_animation(&check_gif_16[0]);
-	send_buff_animation(&check_gif_17[0]);
-	send_buff_animation(&check_gif_18[0]);
-	send_buff_animation(&check_gif_19[0]);
-	send_buff_animation(&check_gif_20[0]);
-	send_buff_animation(&check_gif_21[0]);
-	send_buff_animation(&check_gif_22[0]);
-	send_buff_animation(&check_gif_23[0]);
-	send_buff_animation(&check_gif_24[0]);
-	send_buff_animation(&check_gif_25[0]);
-	send_buff_animation(&check_gif_26[0]);
-	send_buff_animation(&check_gif_27[0]);
-	send_buff_animation(&check_gif_28[0]);
-}
-
-void square_display()
-{
-	clear_display();
-
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
-
-	for(uint16_t j =0; j<TOTAL_BYTES; j++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, square_buff[j]);
-	}
-}
-
-void rectangle_display()
-{
-	clear_display();
-
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
-
-	for(uint16_t j =0; j<TOTAL_BYTES; j++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, rect_buff[j]);
-	}
-}
-
-void shape_display_image(uint8_t* arr)
-{
-	clear_display();
-	write_data(DEV_ADD_WRITE, CMD, SET_ADDR_MODES);
-	write_data(DEV_ADD_WRITE, CMD, HORIZONTAL_ADDR_MODE);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_COL_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_COL_ADDR);
-
-	write_data(DEV_ADD_WRITE, CMD, SET_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, START_PAGE_ADDR);
-	write_data(DEV_ADD_WRITE, CMD, END_PAGE_ADDR);
-
-	/*for(uint16_t i =0; i<512; i++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, shape_fish_64[i]);
-	}
-
-	for(uint16_t i =0; i<256; i++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, shape_fish_32[i]);
-		write_data(DEV_ADD_WRITE, DATA_, 0x00);
-	}*/
-
-	for(uint16_t i =0; i<256; i++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, arr[i]);
-		write_data(DEV_ADD_WRITE, DATA_, 0x00);
-	}
-	for(uint16_t i =0; i<(512*3); i++)
-	{
-		write_data(DEV_ADD_WRITE, DATA_, 0x00);
-	}
-}
-
-void send_buff_animation(uint8_t* buffer)
-{
-	for(uint16_t i =0; i<256; i++)
+	/* sends the entire buffer to the OLED display and then
+	 * pads the remaining values with 0 to ensure that the frames
+	 * don't start shifiting across the display.
+	 */
+	for(uint16_t i =0; i<256; i++) /* 512 bytes */
 	{
 		write_data(DEV_ADD_WRITE, DATA_, buffer[i]);
 		write_data(DEV_ADD_WRITE, DATA_, 0x00);
 	}
-	for(uint16_t i =0; i<256; i++)
+	for(uint16_t i =0; i<256; i++) /* 1536 bytes. 512 +1536 = 2048 */
 	{
 		write_data(DEV_ADD_WRITE, DATA_, 0x00);
 		write_data(DEV_ADD_WRITE, DATA_, 0x00);
@@ -382,41 +237,9 @@ void send_buff_animation(uint8_t* buffer)
 	}
 }
 
-void draw_square()
-{
-	clear_display();
 
-	for(uint8_t i = 16; i<32;i++)
-	{
-		toggle_pixel(i,8,1);
-		toggle_pixel(i,15,1); //23 for rect
-	}
 
-	for(uint8_t j = 8; j<16;j++) //24 for rectangle
-	{
-		toggle_pixel(16,j,1);
-		toggle_pixel(31,j,1);
-	}
-	memset(&table_pixel[0], 0, TOTAL_BYTES);
-}
 
-void draw_rectangle()
-{
-	clear_display();
-
-	for(uint8_t i = 16; i<32;i++)
-	{
-		toggle_pixel(i,8,1);
-		toggle_pixel(i,23,1); //23 for rect
-	}
-
-	for(uint8_t j = 8; j<24;j++) //24 for rectangle
-	{
-		toggle_pixel(16,j,1);
-		toggle_pixel(31,j,1);
-	}
-	memset(&table_pixel[0], 0, TOTAL_BYTES);
-}
 
 
 
