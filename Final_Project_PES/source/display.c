@@ -239,7 +239,7 @@ void rectangle_display()
 	}
 }
 
-void shape_display_image(uint8_t* arr)
+void shape_display_image(const uint8_t* arr)
 {
 	/* clear display */
 	clear_oled();

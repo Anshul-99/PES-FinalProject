@@ -1523,24 +1523,24 @@ END GROUP
                 0x00000000000052f4                _image_size = (_image_end - _image_start)
 OUTPUT(Final_Project_PES.axf elf32-littlearm)
 
-.debug_info     0x0000000000000000     0x8483
+.debug_info     0x0000000000000000     0x848e
  .debug_info    0x0000000000000000      0x69d ./startup/startup_mkl25z4.o
  .debug_info    0x000000000000069d      0x922 ./source/cbfifo.o
  .debug_info    0x0000000000000fbf      0x908 ./source/command_processor.o
- .debug_info    0x00000000000018c7      0xe7b ./source/display.o
- .debug_info    0x0000000000002742      0x3db ./source/hexdump.o
- .debug_info    0x0000000000002b1d      0x4e1 ./source/i2c.o
- .debug_info    0x0000000000002ffe      0x32b ./source/main.o
- .debug_info    0x0000000000003329       0x4f ./source/mtb.o
- .debug_info    0x0000000000003378      0x975 ./source/oled.o
- .debug_info    0x0000000000003ced       0x38 ./source/semihost_hardfault.o
- .debug_info    0x0000000000003d25      0x1e0 ./source/sysclock.o
- .debug_info    0x0000000000003f05      0xb5e ./source/uart.o
- .debug_info    0x0000000000004a63     0x1b35 ./drivers/fsl_lpsci.o
- .debug_info    0x0000000000006598     0x1aac ./drivers/fsl_uart.o
- .debug_info    0x0000000000008044      0x43f ./CMSIS/system_MKL25Z4.o
+ .debug_info    0x00000000000018c7      0xe81 ./source/display.o
+ .debug_info    0x0000000000002748      0x3db ./source/hexdump.o
+ .debug_info    0x0000000000002b23      0x4e1 ./source/i2c.o
+ .debug_info    0x0000000000003004      0x32b ./source/main.o
+ .debug_info    0x000000000000332f       0x4f ./source/mtb.o
+ .debug_info    0x000000000000337e      0x97a ./source/oled.o
+ .debug_info    0x0000000000003cf8       0x38 ./source/semihost_hardfault.o
+ .debug_info    0x0000000000003d30      0x1e0 ./source/sysclock.o
+ .debug_info    0x0000000000003f10      0xb5e ./source/uart.o
+ .debug_info    0x0000000000004a6e     0x1b35 ./drivers/fsl_lpsci.o
+ .debug_info    0x00000000000065a3     0x1aac ./drivers/fsl_uart.o
+ .debug_info    0x000000000000804f      0x43f ./CMSIS/system_MKL25Z4.o
 
-.debug_abbrev   0x0000000000000000     0x1e28
+.debug_abbrev   0x0000000000000000     0x1e2f
  .debug_abbrev  0x0000000000000000      0x155 ./startup/startup_mkl25z4.o
  .debug_abbrev  0x0000000000000155      0x342 ./source/cbfifo.o
  .debug_abbrev  0x0000000000000497      0x22e ./source/command_processor.o
@@ -1549,13 +1549,13 @@ OUTPUT(Final_Project_PES.axf elf32-littlearm)
  .debug_abbrev  0x0000000000000adf      0x191 ./source/i2c.o
  .debug_abbrev  0x0000000000000c70      0x122 ./source/main.o
  .debug_abbrev  0x0000000000000d92       0x43 ./source/mtb.o
- .debug_abbrev  0x0000000000000dd5      0x1cf ./source/oled.o
- .debug_abbrev  0x0000000000000fa4       0x2e ./source/semihost_hardfault.o
- .debug_abbrev  0x0000000000000fd2       0xec ./source/sysclock.o
- .debug_abbrev  0x00000000000010be      0x2cc ./source/uart.o
- .debug_abbrev  0x000000000000138a      0x4a7 ./drivers/fsl_lpsci.o
- .debug_abbrev  0x0000000000001831      0x4a1 ./drivers/fsl_uart.o
- .debug_abbrev  0x0000000000001cd2      0x156 ./CMSIS/system_MKL25Z4.o
+ .debug_abbrev  0x0000000000000dd5      0x1d6 ./source/oled.o
+ .debug_abbrev  0x0000000000000fab       0x2e ./source/semihost_hardfault.o
+ .debug_abbrev  0x0000000000000fd9       0xec ./source/sysclock.o
+ .debug_abbrev  0x00000000000010c5      0x2cc ./source/uart.o
+ .debug_abbrev  0x0000000000001391      0x4a7 ./drivers/fsl_lpsci.o
+ .debug_abbrev  0x0000000000001838      0x4a1 ./drivers/fsl_uart.o
+ .debug_abbrev  0x0000000000001cd9      0x156 ./CMSIS/system_MKL25Z4.o
 
 .debug_loc      0x0000000000000000     0x3c9e
  .debug_loc     0x0000000000000000      0x234 ./startup/startup_mkl25z4.o

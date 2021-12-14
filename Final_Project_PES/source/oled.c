@@ -231,7 +231,7 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
 
 }
 
-void send_animation_buff(uint8_t* buffer)
+void send_animation_buff(const uint8_t* buffer)
 {
 	/* sends the entire buffer to the OLED display and then
 	 * pads the remaining values with 0 to ensure that the frames

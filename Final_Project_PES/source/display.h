@@ -101,6 +101,6 @@ void rectangle_display();
  * Returns:
  *   void
  */
-void shape_display_image(uint8_t* arr);
+void shape_display_image(const uint8_t* arr);
 
 #endif /* DISPLAY_H_ */

@@ -142,7 +142,7 @@ void toggle_pixel_oled(uint8_t x_coordinate, uint8_t y_coordinate, uint8_t state
  * Returns:
  *   void
  */
-void send_animation_buff(uint8_t* buffer);
+void send_animation_buff(const uint8_t* buffer);
 
 #endif /* OLED_H_ */
 
